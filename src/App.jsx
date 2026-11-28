@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
+import { SettingsContext } from './SettingsContext.js'
 import Header from './components/Header.jsx'
 import AddStudentForm from './components/AddStudentForm.jsx'
 import StudentList from './components/StudentList.jsx'
@@ -16,6 +17,7 @@ function App() {
     return startingStudents
   })
   const [search, setSearch] = useState('')
+  const [highlight, setHighlight] = useState(false)
 
   useEffect(() => {
     localStorage.setItem('students', JSON.stringify(students))
@@ -41,19 +43,21 @@ function App() {
   }, [students])
 
   return (
-    <div className="min-h-screen bg-stone-100 text-stone-800">
-      <main className="mx-auto max-w-xl px-6 py-10">
-        <Header count={count} average={average} />
-        <AddStudentForm onAdd={handleAdd} />
-        <input
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search by name"
-          className="mb-3 w-full rounded-lg border border-stone-300 bg-white px-3 py-2"
-        />
-        <StudentList students={visibleStudents} onDelete={handleDelete} />
-      </main>
-    </div>
+    <SettingsContext value={{ highlight, setHighlight }}>
+      <div className="min-h-screen bg-stone-100 text-stone-800">
+        <main className="mx-auto max-w-xl px-6 py-10">
+          <Header count={count} average={average} />
+          <AddStudentForm onAdd={handleAdd} />
+          <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search by name"
+            className="mb-3 w-full rounded-lg border border-stone-300 bg-white px-3 py-2"
+          />
+          <StudentList students={visibleStudents} onDelete={handleDelete} />
+        </main>
+      </div>
+    </SettingsContext>
   )
 }
 
