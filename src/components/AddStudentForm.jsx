@@ -1,7 +1,14 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 function AddStudentForm({ onAdd }) {
   const [form, setForm] = useState({ name: '', grade: '' })
+
+  useEffect(() => {
+    const id = setTimeout(() => {
+      localStorage.setItem('draft', JSON.stringify(form))
+    }, 1000)
+    return () => clearTimeout(id)
+  }, [form])
 
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value })
